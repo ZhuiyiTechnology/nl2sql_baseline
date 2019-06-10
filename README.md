@@ -23,7 +23,10 @@ Firstly, download the provided datasets at ~/data_nl2sql/ including train.json, 
 mkdir ~/nl2sql
 cd ~/nl2sql/
 git clone https://github.com/ZhuiyiTechnology/nl2sql_baseline.git
-cp ~/data_nl2sql/* ~/nl2sql/data
+
+cp ~/data_nl2sql/* ~/nl2sql/nl2sql_baseline/data
+cd ~/nl2sql/nl2sql_baseline/
+
 sh ./start_train.py 0 128
 ```
 while the first parameter 0 means gpu number, the second parameter means batch size.
@@ -32,6 +35,7 @@ while the first parameter 0 means gpu number, the second parameter means batch s
 
 To evaluate on dev.json or test.json, make sure trained model is ready, then run
 ```
+cd ~/nl2sql/nl2sql_baseline/
 sh ./start_test.py 0 pred_example
 ```
 while the first parameter 0 means gpu number, the second parameter means the output path of prediction.
@@ -49,4 +53,4 @@ https://github.com/salesforce/WikiSQL
 
 https://yale-lily.github.io/spider
 
- <a href="https://arxiv.org/pdf/1804.08338.pdf">Semantic Parsing with Syntax- and Table-Aware SQL Generation</a>
+<a href="https://arxiv.org/pdf/1804.08338.pdf">Semantic Parsing with Syntax- and Table-Aware SQL Generation</a>
