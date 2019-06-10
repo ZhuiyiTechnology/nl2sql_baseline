@@ -20,7 +20,7 @@ The difference between SQLNet and this baseline model is, Select-Number and Wher
 
 Firstly, download the provided datasets at ~/data_nl2sql/, which should include train.json, train.tables.json, val.json, val.tables.json and char_embedding, and divide them in following structure.
 ```
-├── data
+├── data_nl2sql
 │ ├── train
 │ │ ├── train.json
 │ │ ├── train.tables.json
@@ -35,7 +35,7 @@ mkdir ~/nl2sql
 cd ~/nl2sql/
 git clone https://github.com/ZhuiyiTechnology/nl2sql_baseline.git
 
-cp ~/data_nl2sql/* ~/nl2sql/nl2sql_baseline/data
+cp -r ~/data_nl2sql/* ~/nl2sql/nl2sql_baseline/data/
 cd ~/nl2sql/nl2sql_baseline/
 
 sh ./start_train.py 0 128
