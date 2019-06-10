@@ -18,15 +18,15 @@ The difference between SQLNet and this baseline model is, Select-Number and Wher
 
 ## Start to train
 
-Firstly, download the provided datasets at ~/data_nl2sql/, which should include train.json, train.tables.json, dev.json, dev.tables.json and char_embedding, and divide them in following structure.
+Firstly, download the provided datasets at ~/data_nl2sql/, which should include train.json, train.tables.json, val.json, val.tables.json and char_embedding, and divide them in following structure.
 ```
 ├── data
 │ ├── train
 │ │ ├── train.json
 │ │ ├── train.tables.json
-│ ├── dev
-│ │ ├── dev.json
-│ │ ├── dev.tables.json
+│ ├── val
+│ │ ├── val.json
+│ │ ├── val.tables.json
 ├── char_embedding
 ```
 and then
@@ -44,7 +44,7 @@ while the first parameter 0 means gpu number, the second parameter means batch s
 
 ## Start to evaluate
 
-To evaluate on dev.json or test.json, make sure trained model is ready, then run
+To evaluate on val.json or test.json, make sure trained model is ready, then run
 ```
 cd ~/nl2sql/nl2sql_baseline/
 sh ./start_test.py 0 pred_example
@@ -53,7 +53,7 @@ while the first parameter 0 means gpu number, the second parameter means the out
 
 ## Experiment result
 
-We have run experiments several times, achiving avegrage 27.5% logic form accuracy on the dev dataset.
+We have run experiments several times, achiving avegrage 27.5% logic form accuracy on the val dataset.
 
 
 ## Experiment analysis
