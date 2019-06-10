@@ -27,7 +27,7 @@ Firstly, download the provided datasets at ~/data_nl2sql/, which should include 
 │ ├── val
 │ │ ├── val.json
 │ │ ├── val.tables.json
-├── char_embedding
+│ ├── char_embedding
 ```
 and then
 ```
