@@ -36,15 +36,15 @@ def load_data(sql_paths, table_paths, use_small=False):
 
 def load_dataset(toy=False, use_small=False, mode='train'):
     print "Loading dataset"
-    dev_sql, dev_table = load_data('data/dev.json', 'data/dev.tables.json', use_small=use_small)
-    dev_db = 'data/dev.db'
+    dev_sql, dev_table = load_data('data/dev/dev.json', 'data/dev/dev.tables.json', use_small=use_small)
+    dev_db = 'data/dev/dev.db'
     if mode == 'train':
-        train_sql, train_table = load_data('data/train.json', 'data/train.tables.json', use_small=use_small)
-        train_db = 'data/train.db'
+        train_sql, train_table = load_data('data/train/train.json', 'data/train/train.tables.json', use_small=use_small)
+        train_db = 'data/train/train.db'
         return train_sql, train_table, train_db, dev_sql, dev_table, dev_db
     elif mode == 'test':
-        test_sql, test_table = load_data('data/test.json', 'data/test.tables.json', use_small=use_small)
-        test_db = 'data/test.db'
+        test_sql, test_table = load_data('data/test/test.json', 'data/test/test.tables.json', use_small=use_small)
+        test_db = 'data/test/test.db'
         return dev_sql, dev_table, dev_db, test_sql, test_table, test_db
 
 def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
