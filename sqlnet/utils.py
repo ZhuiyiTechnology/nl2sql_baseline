@@ -36,8 +36,8 @@ def load_data(sql_paths, table_paths, use_small=False):
 
 def load_dataset(toy=False, use_small=False, mode='train'):
     print "Loading dataset"
-    dev_sql, dev_table = load_data('data/dev/dev.json', 'data/dev/dev.tables.json', use_small=use_small)
-    dev_db = 'data/dev/dev.db'
+    dev_sql, dev_table = load_data('data/val/val.json', 'data/val/val.tables.json', use_small=use_small)
+    dev_db = 'data/val/val.db'
     if mode == 'train':
         train_sql, train_table = load_data('data/train/train.json', 'data/train/train.tables.json', use_small=use_small)
         train_db = 'data/train/train.db'
