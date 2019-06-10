@@ -19,7 +19,7 @@ The difference between SQLNet and this baseline model is, Select-Number and Wher
 ## Start to train
 
 Firstly, download the provided datasets at ~/data_nl2sql/, which includes train.json, train.tables.json, dev.json, dev.tables.json and char_embedding.
-
+```
 ├── data
 │ ├── train
 │ │ ├── train.json
@@ -28,7 +28,7 @@ Firstly, download the provided datasets at ~/data_nl2sql/, which includes train.
 │ │ ├── dev.json
 │ │ ├── dev.tables.json
 ├── char_embedding
-
+```
 
 ```
 mkdir ~/nl2sql
