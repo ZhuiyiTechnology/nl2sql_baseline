@@ -44,9 +44,14 @@ while the first parameter 0 means gpu number, the second parameter means the out
 
 We have run experiments several times, achiving avegrage 27.5% logic form accuracy on the dev dataset.
 
-And we found the main challenges of this datasets containing poor condition value prediction, select column and condition column not mentioned in NL question, inconsistent condition relationship representation between NL question and SQL, etc. All these challenges could not be solve by existing baseline and SOTA models.
 
-Correspondingly, this baseline model achieves only 77% accuracy on condition column and 62% accuracy on condition value respectively even on the training set, which require contestants to pay attention to.
+## Experiment analysis
+
+We found the main challenges of this datasets containing poor condition value prediction, select column and condition column not mentioned in NL question, inconsistent condition relationship representation between NL question and SQL, etc. All these challenges could not be solve by existing baseline and SOTA models.
+
+Correspondingly, this baseline model achieves only 77% accuracy on condition column and 62% accuracy on condition value respectively even on the training set, and the overall logic form is only around 50% as well, indicating these problems are challenging for contestants to solve.
+
+<div align="middle"><img src="https://github.com/ZhuiyiTechnology/nl2sql_baseline/blob/master/img/trainset_behavior.png"width="80%" ></div>
 
 ## Related resources:
 https://github.com/salesforce/WikiSQL
