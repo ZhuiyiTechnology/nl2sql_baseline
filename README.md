@@ -38,7 +38,7 @@ git clone https://github.com/ZhuiyiTechnology/nl2sql_baseline.git
 cp -r ~/data_nl2sql/* ~/nl2sql/nl2sql_baseline/data/
 cd ~/nl2sql/nl2sql_baseline/
 
-sh ./start_train.py 0 128
+sh ./start_train.sh 0 128
 ```
 while the first parameter 0 means gpu number, the second parameter means batch size.
 
@@ -47,7 +47,7 @@ while the first parameter 0 means gpu number, the second parameter means batch s
 To evaluate on val.json or test.json, make sure trained model is ready, then run
 ```
 cd ~/nl2sql/nl2sql_baseline/
-sh ./start_test.py 0 pred_example
+sh ./start_test.sh 0 pred_example
 ```
 while the first parameter 0 means gpu number, the second parameter means the output path of prediction.
 
