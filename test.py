@@ -32,6 +32,9 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(model_path))
     print "Loaded model from %s" % model_path
 
+    dev_acc = epoch_acc(model, batch_size, dev_sql, dev_table, dev_db)
+    print 'Dev Logic Form Accuracy: %.3f, Execution Accuracy: %.3f' % (dev_acc[1], dev_acc[2])
+
     print "Start to predict test set"
-    predict_test(model, batch_size, test_sql, test_table, test_db, args.output_dir)
+    predict_test(model, batch_size, test_sql, test_table, args.output_dir)
     print "Output path of prediction result is %s" % args.output_dir

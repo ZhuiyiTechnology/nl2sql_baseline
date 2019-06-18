@@ -43,6 +43,7 @@ if __name__ == '__main__':
     best_sn, best_sc, best_sa, best_wn, best_wc, best_wo, best_wv, best_wr = 0, 0, 0, 0, 0, 0, 0, 0
     best_sn_idx, best_sc_idx, best_sa_idx, best_wn_idx, best_wc_idx, best_wo_idx, best_wv_idx, best_wr_idx = 0, 0, 0, 0, 0, 0, 0, 0
     best_lf, best_lf_idx = 0.0, 0
+    best_ex, best_ex_idx = 0.0, 0
 
     print "#"*20+"  Star to Train  " + "#"*20
     for i in range(args.epoch):
@@ -50,7 +51,7 @@ if __name__ == '__main__':
         # train on the train dataset
         train_loss = epoch_train(model, optimizer, batch_size, train_sql, train_table)
         # evaluate on the dev dataset
-        dev_acc = epoch_acc(model, batch_size, dev_sql, dev_table)
+        dev_acc = epoch_acc(model, batch_size, dev_sql, dev_table, dev_db)
         # accuracy of each sub-task
         print 'Sel-Num: %.3f, Sel-Col: %.3f, Sel-Agg: %.3f, W-Num: %.3f, W-Col: %.3f, W-Op: %.3f, W-Val: %.3f, W-Rel: %.3f'%(
             dev_acc[0][0], dev_acc[0][1], dev_acc[0][2], dev_acc[0][3], dev_acc[0][4], dev_acc[0][5], dev_acc[0][6], dev_acc[0][7])
@@ -59,6 +60,9 @@ if __name__ == '__main__':
             best_lf = dev_acc[1]
             best_lf_idx = i + 1
             torch.save(model.state_dict(), 'saved_model/best_model')
+        if dev_acc[2] > best_ex:
+            best_ex = dev_acc[2]
+            best_ex_idx = i + 1
 
         # record the best score of each sub-task
         if True:
@@ -87,8 +91,9 @@ if __name__ == '__main__':
                 best_wr = dev_acc[0][7]
                 best_wr_idx = i+1
         print 'Train loss = %.3f' % train_loss
-        print 'Dev Logic Form: %.3f' % dev_acc[1]
+        print 'Dev Logic Form Accuracy: %.3f, Execution Accuracy: %.3f' % (dev_acc[1], dev_acc[2])
         print 'Best Logic Form: %.3f at epoch %d' % (best_lf, best_lf_idx)
+        print 'Best Execution: %.3f at epoch %d' % (best_ex, best_ex_idx)
         if (i+1) % 10 == 0:
             print 'Best val acc: %s\nOn epoch individually %s'%(
                     (best_sn, best_sc, best_sa, best_wn, best_wc, best_wo, best_wv),

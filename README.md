@@ -1,3 +1,7 @@
+***** New June 18st, 2019 *****
+
+This version of release supports execution accuracy, which gets the execution result of predicted SQL. This requires records==0.5.3 before running.
+
 ## Introduction
 
 This baseline method is developed and refined based on <a href="https://github.com/xiaojunxu/SQLNet">code</a> of <a href="https://arxiv.org/abs/1711.04436">SQLNet</a>, which is a baseline model in <a href="https://github.com/salesforce/WikiSQL">WikiSQL</a>.
@@ -14,6 +18,7 @@ The difference between SQLNet and this baseline model is, Select-Number and Wher
 
  - Python 2.7
  - torch 1.0.1
+ - records 0.5.3
  - tqdm
 
 ## Start to train
@@ -22,11 +27,17 @@ Firstly, download the provided datasets at ~/data_nl2sql/, which should include 
 ```
 ├── data_nl2sql
 │ ├── train
+│ │ ├── train.db
 │ │ ├── train.json
 │ │ ├── train.tables.json
 │ ├── val
+│ │ ├── val.db
 │ │ ├── val.json
 │ │ ├── val.tables.json
+│ ├── test
+│ │ ├── test.db
+│ │ ├── test.json
+│ │ ├── test.tables.json
 │ ├── char_embedding
 ```
 and then
@@ -53,7 +64,7 @@ while the first parameter 0 means gpu number, the second parameter means the out
 
 ## Experiment result
 
-We have run experiments several times, achiving avegrage 27.5% logic form accuracy on the val dataset.
+We have run experiments several times, achiving avegrage 27.5% logic form accuracy on the val dataset, with 128 batch size.
 
 
 ## Experiment analysis
