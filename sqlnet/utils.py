@@ -1,5 +1,5 @@
 import json
-from lib.dbengine import DBEngine
+from sqlnet.lib.dbengine import DBEngine
 import numpy as np
 from tqdm import tqdm
 
@@ -12,20 +12,20 @@ def load_data(sql_paths, table_paths, use_small=False):
     table_data = {}
 
     for SQL_PATH in sql_paths:
-        with open(SQL_PATH) as inf:
+        with open(SQL_PATH, encoding='utf-8') as inf:
             for idx, line in enumerate(inf):
                 sql = json.loads(line.strip())
                 if use_small and idx >= 1000:
                     break
                 sql_data.append(sql)
-        print "Loaded %d data from %s" % (len(sql_data), SQL_PATH)
+        print ("Loaded %d data from %s" % (len(sql_data), SQL_PATH))
 
     for TABLE_PATH in table_paths:
-        with open(TABLE_PATH) as inf:
+        with open(TABLE_PATH, encoding='utf-8') as inf:
             for line in inf:
                 tab = json.loads(line.strip())
                 table_data[tab[u'id']] = tab
-        print "Loaded %d data from %s" % (len(table_data), TABLE_PATH)
+        print ("Loaded %d data from %s" % (len(table_data), TABLE_PATH))
 
     ret_sql_data = []
     for sql in sql_data:
@@ -35,7 +35,7 @@ def load_data(sql_paths, table_paths, use_small=False):
     return ret_sql_data, table_data
 
 def load_dataset(toy=False, use_small=False, mode='train'):
-    print "Loading dataset"
+    print ("Loading dataset")
     dev_sql, dev_table = load_data('data/val/val.json', 'data/val/val.tables.json', use_small=use_small)
     dev_db = 'data/val/val.db'
     if mode == 'train':
@@ -107,6 +107,7 @@ def to_batch_query(sql_data, idxes, st, ed):
 def epoch_train(model, optimizer, batch_size, sql_data, table_data):
     model.train()
     perm=np.random.permutation(len(sql_data))
+    perm = list(range(len(sql_data)))
     cum_loss = 0.0
     for st in tqdm(range(len(sql_data)//batch_size+1)):
         ed = (st+1)*batch_size if (st+1)*batch_size < len(perm) else len(perm)
@@ -173,7 +174,7 @@ def epoch_acc(model, batch_size, sql_data, table_data, db_path):
             one_err, tot_err = model.check_acc(raw_data, pred_queries, query_gt)
         except:
             badcase += 1
-            print 'badcase', badcase
+            print ('badcase', badcase)
             continue
         one_acc_num += (ed-st-one_err)
         tot_acc_num += (ed-st-tot_err)
@@ -191,10 +192,14 @@ def epoch_acc(model, batch_size, sql_data, table_data, db_path):
 
 def load_word_emb(file_name):
     print ('Loading word embedding from %s'%file_name)
-    ret = {}
-    with open(file_name) as inf:
-        for idx, line in enumerate(inf):
-            info = line.strip().split(' ')
-            if info[0].lower() not in ret:
-                ret[info[0].decode('utf-8')] = np.array(map(lambda x:float(x), info[1:]))
+    f = open(file_name)
+    ret = json.load(f)
+    f.close()
+    # ret = {}
+    # with open(file_name, encoding='latin') as inf:
+    #     ret = json.load(inf)
+    #     for idx, line in enumerate(inf):
+    #         info = line.strip().split(' ')
+    #         if info[0].lower() not in ret:
+    #             ret[info[0]] = np.array([float(x) for x in info[1:]])
     return ret

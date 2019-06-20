@@ -3,12 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
-from modules.word_embedding import WordEmbedding
-from modules.aggregator_predict import AggPredictor
-from modules.selection_predict import SelPredictor
-from modules.sqlnet_condition_predict import SQLNetCondPredictor
-from modules.select_number import SelNumPredictor
-from modules.where_relation import WhereRelationPredictor
+from sqlnet.model.modules.word_embedding import WordEmbedding
+from sqlnet.model.modules.aggregator_predict import AggPredictor
+from sqlnet.model.modules.selection_predict import SelPredictor
+from sqlnet.model.modules.sqlnet_condition_predict import SQLNetCondPredictor
+from sqlnet.model.modules.select_number import SelNumPredictor
+from sqlnet.model.modules.where_relation import WhereRelationPredictor
 
 
 class SQLNet(nn.Module):
@@ -140,7 +140,8 @@ class SQLNet(nn.Module):
         loss = 0
 
         # Evaluate select number
-        sel_num_truth = map(lambda x:x[0], truth_num)
+        # sel_num_truth = map(lambda x:x[0], truth_num)
+        sel_num_truth = [x[0] for x in truth_num]
         sel_num_truth = torch.from_numpy(np.array(sel_num_truth))
         if self.gpu:
             sel_num_truth = Variable(sel_num_truth.cuda())
@@ -173,20 +174,21 @@ class SQLNet(nn.Module):
                 sel_agg_truth_var = Variable(data.cuda())
             else:
                 sel_agg_truth_var = Variable(data)
-            sel_agg_pred = agg_score[b, :len(truth_num[b][1])]
-            loss += (self.CE(sel_agg_pred, sel_agg_truth_var)) / len(truth_num)
+        sel_agg_pred = agg_score[b, :len(truth_num[b][1])]
+        loss += (self.CE(sel_agg_pred, sel_agg_truth_var)) / len(truth_num)
 
         cond_num_score, cond_col_score, cond_op_score, cond_str_score = cond_score
 
         # Evaluate the number of conditions
-        cond_num_truth = map(lambda x:x[3], truth_num)
+        # cond_num_truth = map(lambda x:x[3], truth_num)
+        cond_num_truth = [x[3] for x in truth_num]
         data = torch.from_numpy(np.array(cond_num_truth))
         if self.gpu:
             try:
                 cond_num_truth_var = Variable(data.cuda())
             except:
-                print "cond_num_truth_var error"
-                print data
+                print ("cond_num_truth_var error")
+                print (data)
                 exit(0)
         else:
             cond_num_truth_var = Variable(data)
@@ -224,8 +226,8 @@ class SQLNet(nn.Module):
             try:
                 loss += (self.CE(cond_op_pred, cond_op_truth_var) / len(truth_num))
             except:
-                print cond_op_pred
-                print cond_op_truth_var
+                print (cond_op_pred)
+                print (cond_op_truth_var)
                 exit(0)
 
         #Evaluate the strings of conditions
@@ -245,14 +247,15 @@ class SQLNet(nn.Module):
                         / (len(gt_where) * len(gt_where[b])))
 
         # Evaluate condition relationship, and / or
-        where_rela_truth = map(lambda x:x[6], truth_num)
+        # where_rela_truth = map(lambda x:x[6], truth_num)
+        where_rela_truth = [x[6] for x in truth_num]
         data = torch.from_numpy(np.array(where_rela_truth))
         if self.gpu:
             try:
                 where_rela_truth = Variable(data.cuda())
             except:
-                print "where_rela_truth error"
-                print data
+                print ("where_rela_truth error")
+                print (data)
                 exit(0)
         else:
             where_rela_truth = Variable(data)

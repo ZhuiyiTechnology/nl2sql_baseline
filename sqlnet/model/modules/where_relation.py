@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
-from net_utils import run_lstm, col_name_encode
+from sqlnet.model.modules.net_utils import run_lstm, col_name_encode
 
 class WhereRelationPredictor(nn.Module):
     def __init__(self, N_word, N_h, N_depth, use_ca):
@@ -12,9 +12,7 @@ class WhereRelationPredictor(nn.Module):
         self.N_h = N_h
         self.use_ca = use_ca
 
-        self.where_rela_lstm = nn.LSTM(input_size=N_word, hidden_size=N_h/2,
-                                    num_layers=N_depth, batch_first=True,
-                                    dropout=0.3, bidirectional=True)
+        self.where_rela_lstm = nn.LSTM(input_size=N_word, hidden_size=int(N_h/2), num_layers=N_depth, batch_first=True, dropout=0.3, bidirectional=True)
         self.where_rela_att = nn.Linear(N_h, 1)
         self.where_rela_col_att = nn.Linear(N_h, 1)
         self.where_rela_out = nn.Sequential(nn.Linear(N_h, N_h), nn.Tanh(), nn.Linear(N_h,3))
@@ -23,7 +21,7 @@ class WhereRelationPredictor(nn.Module):
         self.col2hid2 = nn.Linear(N_h, 2 * N_h)
 
         if self.use_ca:
-            print "Using column attention on where relation predicting"
+            print ("Using column attention on where relation predicting")
 
     def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
         B = len(x_len)
@@ -40,8 +38,8 @@ class WhereRelationPredictor(nn.Module):
                 col_att_val[idx, num:] = -1000000
         num_col_att = self.softmax(col_att_val)
         K_num_col = (e_num_col * num_col_att.unsqueeze(2)).sum(1)
-        h1 = self.col2hid1(K_num_col).view(B, 4, self.N_h/2).transpose(0,1).contiguous()
-        h2 = self.col2hid2(K_num_col).view(B, 4, self.N_h/2).transpose(0,1).contiguous()
+        h1 = self.col2hid1(K_num_col).view(B, 4, self.N_h//2).transpose(0,1).contiguous()
+        h2 = self.col2hid2(K_num_col).view(B, 4, self.N_h//2).transpose(0,1).contiguous()
 
         h_enc, _ = run_lstm(self.where_rela_lstm, x_emb_var, x_len, hidden=(h1, h2))
 
