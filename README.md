@@ -1,3 +1,8 @@
+***** New June 21st, 2019 *****
+This branch aims to support Python3, which is developed under Python3.5 and PyTorch1.0.
+
+ATTENTION: To use this version of code, please download nl2sql_char_embedding_py3.zip to use, instead of nl2sql_char_embedding_baseline.zip.  
+
 ***** New June 18st, 2019 *****
 
 This version of release supports execution accuracy, which gets the execution result of predicted SQL. This requires records==0.5.3 before running.
@@ -38,7 +43,7 @@ Firstly, download the provided datasets at ~/data_nl2sql/, which should include 
 │ │ ├── test.db
 │ │ ├── test.json
 │ │ ├── test.tables.json
-│ ├── char_embedding
+│ ├── char_embedding.json
 ```
 and then
 ```
