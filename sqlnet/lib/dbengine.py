@@ -61,6 +61,6 @@ class DBEngine:
         where_str = ''
         if where_clause:
             where_str = 'WHERE ' + wr.join(where_clause)
-        query = 'SELECT {} AS result FROM {} {}'.format(tmp, table_id, where_str)
+        query = 'SELECT {} FROM {} {}'.format(tmp, table_id, where_str)
         out = self.conn.query(query, **where_map)
-        return [o.result for o in out]
+        return out.as_dict()
