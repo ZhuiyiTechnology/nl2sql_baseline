@@ -143,7 +143,9 @@ def predict_test(model, batch_size, sql_data, table_data, output_path):
         score = model.forward(q_seq, col_seq, col_num)
         sql_preds = model.gen_query(score, q_seq, col_seq, raw_q_seq)
         for sql_pred in sql_preds:
-            fw.writelines(json.dumps(sql_pred,ensure_ascii=False).encode('utf-8')+'\n')
+            sql_pred = eval(str(sql_pred))
+            fw.writelines(json.dumps(sql_pred, ensure_ascii=False)+'\n')
+            # fw.writelines(json.dumps(sql_pred,ensure_ascii=False).encode('utf-8')+'\n')
     fw.close()
 
 def epoch_acc(model, batch_size, sql_data, table_data, db_path):
