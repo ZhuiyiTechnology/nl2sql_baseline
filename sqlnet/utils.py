@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 from lib.dbengine import DBEngine
 import numpy as np
@@ -18,14 +19,14 @@ def load_data(sql_paths, table_paths, use_small=False):
                 if use_small and idx >= 1000:
                     break
                 sql_data.append(sql)
-        print "Loaded %d data from %s" % (len(sql_data), SQL_PATH)
+        print("Loaded %d data from %s" % (len(sql_data), SQL_PATH))
 
     for TABLE_PATH in table_paths:
         with open(TABLE_PATH) as inf:
             for line in inf:
                 tab = json.loads(line.strip())
                 table_data[tab[u'id']] = tab
-        print "Loaded %d data from %s" % (len(table_data), TABLE_PATH)
+        print("Loaded %d data from %s" % (len(table_data), TABLE_PATH))
 
     ret_sql_data = []
     for sql in sql_data:
@@ -35,7 +36,7 @@ def load_data(sql_paths, table_paths, use_small=False):
     return ret_sql_data, table_data
 
 def load_dataset(toy=False, use_small=False, mode='train'):
-    print "Loading dataset"
+    print("Loading dataset")
     dev_sql, dev_table = load_data('data/val/val.json', 'data/val/val.tables.json', use_small=use_small)
     dev_db = 'data/val/val.db'
     if mode == 'train':
@@ -173,7 +174,7 @@ def epoch_acc(model, batch_size, sql_data, table_data, db_path):
             one_err, tot_err = model.check_acc(raw_data, pred_queries, query_gt)
         except:
             badcase += 1
-            print 'badcase', badcase
+            print('badcase', badcase)
             continue
         one_acc_num += (ed-st-one_err)
         tot_acc_num += (ed-st-tot_err)

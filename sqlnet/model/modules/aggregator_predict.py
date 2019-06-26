@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -17,13 +18,13 @@ class AggPredictor(nn.Module):
                 num_layers=N_depth, batch_first=True,
                 dropout=0.3, bidirectional=True)
         if use_ca:
-            print "Using column attention on aggregator predicting"
+            print("Using column attention on aggregator predicting")
             self.agg_col_name_enc = nn.LSTM(input_size=N_word,
                     hidden_size=N_h/2, num_layers=N_depth,
                     batch_first=True, dropout=0.3, bidirectional=True)
             self.agg_att = nn.Linear(N_h, N_h)
         else:
-            print "Not using column attention on aggregator predicting"
+            print("Not using column attention on aggregator predicting")
             self.agg_att = nn.Linear(N_h, 1)
         self.agg_out = nn.Sequential(nn.Linear(N_h, N_h), nn.Tanh(), nn.Linear(N_h, 6))
         self.softmax = nn.Softmax(dim=-1)

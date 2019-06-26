@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -23,7 +24,7 @@ class WhereRelationPredictor(nn.Module):
         self.col2hid2 = nn.Linear(N_h, 2 * N_h)
 
         if self.use_ca:
-            print "Using column attention on where relation predicting"
+            print("Using column attention on where relation predicting")
 
     def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
         B = len(x_len)

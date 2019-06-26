@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -15,10 +16,10 @@ class SelPredictor(nn.Module):
                 num_layers=N_depth, batch_first=True,
                 dropout=0.3, bidirectional=True)
         if use_ca:
-            print "Using column attention on selection predicting"
+            print("Using column attention on selection predicting")
             self.sel_att = nn.Linear(N_h, N_h)
         else:
-            print "Not using column attention on selection predicting"
+            print("Not using column attention on selection predicting")
             self.sel_att = nn.Linear(N_h, 1)
         self.sel_col_name_enc = nn.LSTM(input_size=N_word, hidden_size=N_h/2,
                 num_layers=N_depth, batch_first=True,

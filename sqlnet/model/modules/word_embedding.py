@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -15,14 +16,14 @@ class WordEmbedding(nn.Module):
         self.SQL_TOK = SQL_TOK
 
         if trainable:
-            print "Using trainable embedding"
+            print("Using trainable embedding")
             self.w2i, word_emb_val = word_emb
             self.embedding = nn.Embedding(len(self.w2i), N_word)
             self.embedding.weight = nn.Parameter(
                     torch.from_numpy(word_emb_val.astype(np.float32)))
         else:
             self.word_emb = word_emb
-            print "Using fixed embedding"
+            print("Using fixed embedding")
 
 
     def gen_x_batch(self, q, col):

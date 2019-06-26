@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -25,7 +26,7 @@ class SelNumPredictor(nn.Module):
 
 
         if self.use_ca:
-            print "Using column attention on select number predicting"
+            print("Using column attention on select number predicting")
 
     def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
         B = len(x_len)

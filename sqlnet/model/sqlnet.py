@@ -1,3 +1,4 @@
+from __future__ import print_function
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -185,8 +186,8 @@ class SQLNet(nn.Module):
             try:
                 cond_num_truth_var = Variable(data.cuda())
             except:
-                print "cond_num_truth_var error"
-                print data
+                print("cond_num_truth_var error")
+                print(data)
                 exit(0)
         else:
             cond_num_truth_var = Variable(data)
@@ -224,8 +225,8 @@ class SQLNet(nn.Module):
             try:
                 loss += (self.CE(cond_op_pred, cond_op_truth_var) / len(truth_num))
             except:
-                print cond_op_pred
-                print cond_op_truth_var
+                print(cond_op_pred)
+                print(cond_op_truth_var)
                 exit(0)
 
         #Evaluate the strings of conditions
@@ -251,8 +252,8 @@ class SQLNet(nn.Module):
             try:
                 where_rela_truth = Variable(data.cuda())
             except:
-                print "where_rela_truth error"
-                print data
+                print("where_rela_truth error")
+                print(data)
                 exit(0)
         else:
             where_rela_truth = Variable(data)
