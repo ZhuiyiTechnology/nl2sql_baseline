@@ -1,3 +1,22 @@
+***** New June 28st, 2019 *****
+
+Fix the execution accuracy calculation, covering all correct cases, for example
+
+```
+SELECT COL_1, COL_2 ...
+SELECT COL_2, COL_1 ...
+```
+
+Another example is
+
+```
+SELECT COL_1 ... WHERE COL_2 == 1 OR COL_3 == 1
+SELECT COL_1 ... WHERE COL_3 == 1 OR COL_2 == 1
+```
+
+Now we assume these SQL pairs have the same execution result. 
+
+
 ***** New June 18st, 2019 *****
 
 This version of release supports execution accuracy, which gets the execution result of predicted SQL. This requires records==0.5.3 before running.
