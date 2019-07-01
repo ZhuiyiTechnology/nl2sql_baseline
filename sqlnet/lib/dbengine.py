@@ -1,66 +1,57 @@
+# -*- coding:utf-8 -*-
+import json
 import records
 import re
-from babel.numbers import parse_decimal, NumberFormatError
-
-
-schema_re = re.compile(r'\((.+)\)')
-num_re = re.compile(r'[-+]?\d*\.\d+|\d+')
 
 agg_dict = {0:"", 1:"AVG", 2:"MAX", 3:"MIN", 4:"COUNT", 5:"SUM"}
 cond_op_dict = {0:">", 1:"<", 2:"==", 3:"!="}
-cond_rela_dict = {0:"and",1:"or",-1:""}
+rela_dict = {0:'', 1:' AND ', 2:' OR '}
 
 class DBEngine:
-
     def __init__(self, fdb):
         self.db = records.Database('sqlite:///{}'.format(fdb))
         self.conn = self.db.get_connection()
 
-    def execute(self, table_id, select_index, aggregation_index, conditions, condition_relation, lower=True):
-        if not table_id.startswith('Table'):
-            table_id = 'Table_{}'.format(table_id.replace('-', '_'))
-        wr = ""
-        if condition_relation == 1 or condition_relation == 0:
-            wr = " AND "
-        elif condition_relation == 2:
-            wr = " OR "
+    def execute(self, table_id, select_index, aggregation_index, conditions, condition_relation):
+        """
+        table_id: id of the queried table.
+        select_index: list of selected column index, like [0,1,2]
+        aggregation_index: list of aggregation function corresponding to selected column, like [0,0,0], length is equal to select_index
+        conditions: [[condition column, condition operator, condition value], ...]
+        condition_relation: 0 or 1 or 2
+        """
+        table_id = 'Table_{}'.format(table_id)
 
-        table_info = self.conn.query('SELECT sql from sqlite_master WHERE tbl_name = :name', name=table_id).all()[0].sql
-        schema_str = schema_re.findall(table_info)[0]
-        schema = {}
-        for tup in schema_str.split(','):
-            c, t = tup.split(' ')
-            schema[c] = t
+        # 条件数>1 而 条件关系为''
+        if condition_relation == 0 and len(conditions) > 1:
+            return 'Error1'
+        # 选择列或条件列为0
+        if len(select_index) == 0 or len(conditions) == 0 or len(aggregation_index) == 0:
+            return 'Error2'
 
-        tmp = ""
+        condition_relation = rela_dict[condition_relation]
+
+        select_part = ""
         for sel, agg in zip(select_index, aggregation_index):
             select_str = 'col_{}'.format(sel+1)
             agg_str = agg_dict[agg]
             if agg:
-                tmp += '{}({}),'.format(agg_str, select_str)
+                select_part += '{}({}),'.format(agg_str, select_str)
             else:
-                tmp += '({}),'.format(select_str)
-        tmp = tmp[:-1]
+                select_part += '({}),'.format(select_str)
+        select_part = select_part[:-1]
 
-        where_clause = []
-        where_map = {}
+        where_part = []
         for col_index, op, val in conditions:
-            if lower and (isinstance(val, str) or isinstance(val, str)):
-                val = val.lower()
-            if schema['col_{}'.format(col_index+1)] == 'real' and not isinstance(val, (int, float)):
-                try:
-                    val = float(parse_decimal(val, locale='en_US'))
-                except NumberFormatError as e:
-                    try:
-                        val = float(num_re.findall(val)[0]) # need to understand and debug this part.
-                    except:
-                        # Although column is of number, selected one is not number. Do nothing in this case.
-                        pass
-            where_clause.append('col_{} {} :col_{}'.format(col_index+1, cond_op_dict[op], col_index+1))
-            where_map['col_{}'.format(col_index+1)] = val
-        where_str = ''
-        if where_clause:
-            where_str = 'WHERE ' + wr.join(where_clause)
-        query = 'SELECT {} FROM {} {}'.format(tmp, table_id, where_str)
-        out = self.conn.query(query, **where_map)
-        return out.as_dict()
+            where_part.append('col_{} {} "{}"'.format(col_index+1, cond_op_dict[op], val))
+        where_part = 'WHERE ' + condition_relation.join(where_part)
+
+        query = 'SELECT {} FROM {} {}'.format(select_part, table_id, where_part)
+        try:
+            out = self.conn.query(query).as_dict()
+        except:
+            return 'Error3'
+
+        # result_set = [tuple(set(i.values())) for i in out]
+        result_set = [tuple(sorted(i.values(), key=lambda x:str(x))) for i in out]
+        return result_set
