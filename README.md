@@ -1,3 +1,21 @@
+***** New June 28st, 2019 *****
+
+Fix the execution accuracy calculation, covering all correct cases, for example
+
+```
+SELECT COL_1, COL_2 ...
+SELECT COL_2, COL_1 ...
+```
+
+Another example is
+
+```
+SELECT COL_1 ... WHERE COL_2 == 1 OR COL_3 == 1
+SELECT COL_1 ... WHERE COL_3 == 1 OR COL_2 == 1
+```
+
+Now we assume these SQL pairs have the same execution result.
+
 ***** New June 21st, 2019 *****
 
 This branch aims to support Python3, which is developed under Python3.5 and PyTorch1.0.
