@@ -24,10 +24,10 @@ class DBEngine:
 
         # 条件数>1 而 条件关系为''
         if condition_relation == 0 and len(conditions) > 1:
-            return 'Error1', 'Error1'
+            return 'Error1'
         # 选择列或条件列为0
         if len(select_index) == 0 or len(conditions) == 0 or len(aggregation_index) == 0:
-            return 'Error2', 'Error2'
+            return 'Error2'
 
         condition_relation = rela_dict[condition_relation]
 
@@ -54,8 +54,8 @@ class DBEngine:
         try:
             out = self.conn.query(query).as_dict()
         except:
-            return 'Error3', query
+            return 'Error3'
 
         result_set = [tuple(sorted(i.values())) for i in out]
         # result_set = [tuple(sorted(i.values(), key=lambda x:str(x))) for i in out]
-        return result_set, query
+        return result_set
