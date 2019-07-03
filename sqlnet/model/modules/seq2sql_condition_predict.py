@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import torch
 import torch.nn as nn
@@ -9,7 +10,7 @@ from net_utils import run_lstm
 class Seq2SQLCondPredictor(nn.Module):
     def __init__(self, N_word, N_h, N_depth, max_col_num, max_tok_num, gpu):
         super(Seq2SQLCondPredictor, self).__init__()
-        print "Seq2SQL where prediction"
+        print("Seq2SQL where prediction")
         self.N_h = N_h
         self.max_tok_num = max_tok_num
         self.max_col_num = max_col_num
