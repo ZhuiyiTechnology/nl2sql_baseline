@@ -44,7 +44,7 @@ class AggPredictor(nn.Module):
 
         for idx, num in enumerate(x_len):
             if num < max_x_len:
-                att_val[idx, num:] = -100
+                att_val[idx, :, num:] = -100
         att = self.softmax(att_val.view(B*4, -1)).view(B, 4, -1)
 
         K_agg = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
