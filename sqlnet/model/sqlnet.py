@@ -10,6 +10,11 @@ from sqlnet.model.modules.sqlnet_condition_predict import SQLNetCondPredictor
 from sqlnet.model.modules.select_number import SelNumPredictor
 from sqlnet.model.modules.where_relation import WhereRelationPredictor
 
+try:
+    unicode
+except NameError:  # Python 3
+    unicode = str
+
 
 class SQLNet(nn.Module):
     def __init__(self, word_emb, N_word, N_h=100, N_depth=2,
