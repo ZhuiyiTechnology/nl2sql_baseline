@@ -160,7 +160,7 @@ class SQLNetCondPredictor(nn.Module):
             # print gt_cond
             chosen_col_gt = [[x[0] for x in one_gt_cond] for one_gt_cond in gt_cond]
 
-        e_cond_col, _ = col_name_encode(col_inp_var, col_name_len,
+        e_op_col, _ = col_name_encode(col_inp_var, col_name_len,
                 col_len, self.cond_op_name_enc)
         h_op_enc, _ = run_lstm(self.cond_op_lstm, x_emb_var, x_len)
         col_emb = []
