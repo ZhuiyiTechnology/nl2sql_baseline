@@ -18,7 +18,7 @@ Now we assume these SQL pairs have the same execution result.
 
 ***** New June 21st, 2019 *****
 
-This branch aims to support Python3, which is developed under Python3.5 and PyTorch1.0.
+This branch aims to support Python3, which is developed under Python3.6 and PyTorch1.0.
 
 ATTENTION: To use this version of code, please download nl2sql_char_embedding_py3.zip to use, instead of nl2sql_char_embedding_baseline.zip.  
 
